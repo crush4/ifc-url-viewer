@@ -2,6 +2,8 @@ import * as OBC from "@thatopen/components";
 import * as OBF from "@thatopen/components-front";
 import * as BUI from "@thatopen/ui";
 import * as FRAGS from "@thatopen/fragments";
+import { i18n } from "../../../locales/i18n";
+import { withLocalization } from "../../../locales/withLocalization";
 
 type MeasureComponent =
   | OBF.EdgeMeasurement
@@ -33,7 +35,7 @@ export default (world: OBC.World, components: OBC.Components) => {
 
   const getEnabled = () => {
     const checkbox = document.getElementById(
-      "measurement-checkbox",
+      "measurement-checkbox"
     ) as BUI.Checkbox;
     if (!checkbox) {
       return false;
@@ -43,7 +45,7 @@ export default (world: OBC.World, components: OBC.Components) => {
 
   const getSelected = () => {
     const dropdown = document.getElementById(
-      "measurement-dropdown",
+      "measurement-dropdown"
     ) as BUI.Dropdown;
 
     return dropdown.value[0];
@@ -153,24 +155,26 @@ export default (world: OBC.World, components: OBC.Components) => {
   const dropDown = BUI.Component.create<BUI.Dropdown>(() => {
     return BUI.html`      
         <bim-dropdown id="measurement-dropdown" @change="${onToolChanged}">
-            <bim-option label="Edge"></bim-option>
-            <bim-option label="Face"></bim-option>
-            <bim-option label="Volume"></bim-option>
-            <bim-option label="Length"></bim-option>
-            <bim-option label="Area"></bim-option>
+            <bim-option label="${i18n.t("toolbar.measurement.tools.edge")}"></bim-option>
+            <bim-option label="${i18n.t("toolbar.measurement.tools.face")}"></bim-option>
+            <bim-option label="${i18n.t("toolbar.measurement.tools.volume")}"></bim-option>
+            <bim-option label="${i18n.t("toolbar.measurement.tools.length")}"></bim-option>
+            <bim-option label="${i18n.t("toolbar.measurement.tools.area")}"></bim-option>
         </bim-dropdown>       
     `;
   });
 
   dropDown.value = ["Edge"];
 
-  return BUI.Component.create<BUI.PanelSection>(() => {
+  const section = BUI.Component.create<BUI.PanelSection>(() => {
     return BUI.html`
-      <bim-toolbar-section label="Measurements" icon="tdesign:measurement-1" style="pointer-events: auto">
-        <bim-checkbox id="measurement-checkbox" @change="${onEnabled}" label="Enabled" icon="material-symbols:fit-screen-rounded"></bim-checkbox>
-        <bim-button @click="${deleteAll}" label="Delete all" icon="material-symbols:fit-screen-rounded"></bim-button>        
+      <bim-toolbar-section label="${i18n.t("toolbar.tabs.measurement")}" icon="tdesign:measurement-1" style="pointer-events: auto">
+        <bim-checkbox id="measurement-checkbox" @change="${onEnabled}" label="${i18n.t("toolbar.measurement.enabled")}" icon="material-symbols:fit-screen-rounded"></bim-checkbox>
+        <bim-button @click="${deleteAll}" label="${i18n.t("toolbar.measurement.deleteAll")}" icon="material-symbols:fit-screen-rounded"></bim-button>        
         ${dropDown}    
       </bim-toolbar-section>
     `;
   });
+
+  return withLocalization(section, () => {});
 };

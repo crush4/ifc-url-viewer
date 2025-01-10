@@ -1,17 +1,30 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BIM App</title>
+    <link rel="stylesheet" href="./src/style.css" />
+    <script>
+      // Redirect root path to language-specific path
+      if (window.location.pathname === "/") {
+        const storedLang = localStorage.getItem("preferred-language");
+        const userLang = navigator.language.split("-")[0];
+        const supportedLangs = ["en", "de", "fr", "it"];
+        const lang =
+          storedLang && supportedLangs.includes(storedLang)
+            ? storedLang
+            : supportedLangs.includes(userLang)
+              ? userLang
+              : "en";
+        window.location.pathname = `/${lang}`;
+      }
+    </script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BIM App</title>
-  <link rel="stylesheet" href="./src/style.css">
-</head>
-
-<body>
-  <bim-grid id="app"></bim-grid>
-  <script type="module" src="/src/main.ts"></script>
-</body>
-
+  <body>
+    <bim-grid id="app"></bim-grid>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>

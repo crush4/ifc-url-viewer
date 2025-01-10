@@ -1,6 +1,7 @@
 import * as BUI from "@thatopen/ui";
 import * as OBC from "@thatopen/components";
 import * as CUI from "@thatopen/ui-obc";
+import { i18n } from "../../locales/i18n";
 import groupings from "./Sections/Groupings";
 
 export default (components: OBC.Components) => {
@@ -21,7 +22,7 @@ export default (components: OBC.Components) => {
   return BUI.Component.create<BUI.Panel>(() => {
     return BUI.html`
       <bim-panel>
-        <bim-panel-section label="Loaded Models" icon="mage:box-3d-fill">
+        <bim-panel-section label="${i18n.t("panels.project.loadedModels")}" icon="mage:box-3d-fill">
           ${modelsList}
         </bim-panel-section>
         <bim-panel-section label="Spatial Structures" icon="ph:tree-structure-fill">

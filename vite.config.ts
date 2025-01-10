@@ -8,4 +8,26 @@ export default defineConfig({
       "top-level-await": true,
     },
   },
+  assetsInclude: ["**/*.json"],
+  build: {
+    rollupOptions: {
+      input: {
+        main: "./index.html",
+      },
+    },
+  },
+  resolve: {
+    alias: {
+      "@": "/src",
+    },
+  },
+  json: {
+    stringify: true,
+    namedExports: true,
+  },
+  server: {
+    proxy: {
+      // Add proxy rules if needed
+    },
+  },
 });
