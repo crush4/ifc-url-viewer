@@ -39,7 +39,7 @@ const EmptyStateContent = (components: OBC.Components) => {
 
     const files = Array.from(e.dataTransfer?.files || []);
     const ifcFile = files.find((file) =>
-      file.name.toLowerCase().endsWith(".ifc")
+      file.name.toLowerCase().endsWith(".ifc"),
     );
 
     if (ifcFile) {
