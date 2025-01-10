@@ -36,7 +36,7 @@ export default (components: OBC.Components) => {
       .split("")
       .reduce(
         (acc, char) => acc * 26 + (char.charCodeAt(0) - "A".charCodeAt(0)),
-        0
+        0,
       );
     return { row: rowMatch, col };
   };
@@ -296,7 +296,7 @@ export default (components: OBC.Components) => {
     // Handle Description properties
     Promise.all(properties).then(async (resolvedProps) => {
       const propertyWithDescription = resolvedProps.find(
-        (props) => props?.Description?.value
+        (props) => props?.Description?.value,
       );
 
       const value = propertyWithDescription?.Description?.value || "";
@@ -373,7 +373,7 @@ export default (components: OBC.Components) => {
     // Wait for all promises to resolve
     Promise.all(properties).then(async (resolvedProps) => {
       const propertyWithDescription = resolvedProps.find(
-        (props) => props?.Description?.value
+        (props) => props?.Description?.value,
       );
 
       const value = propertyWithDescription?.Description?.value || "";
