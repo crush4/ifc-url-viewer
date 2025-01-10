@@ -14,6 +14,11 @@ export default (components: OBC.Components) => {
   });
   relationsTree.preserveStructureOnFilter = true;
 
+  const [loadBtn] = CUI.buttons.loadIfc({ components });
+  loadBtn.label = i18n.t("panels.project.loadModel");
+  loadBtn.style.width = "100%";
+  loadBtn.style.marginBottom = "1rem";
+
   const search = (e: Event) => {
     const input = e.target as BUI.TextInput;
     relationsTree.queryString = input.value;
@@ -23,6 +28,7 @@ export default (components: OBC.Components) => {
     return BUI.html`
       <bim-panel>
         <bim-panel-section label="${i18n.t("panels.project.loadedModels")}" icon="mage:box-3d-fill">
+          ${loadBtn}
           ${modelsList}
         </bim-panel-section>
         <bim-panel-section label="Spatial Structures" icon="ph:tree-structure-fill">

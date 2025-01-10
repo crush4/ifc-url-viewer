@@ -59,5 +59,29 @@ export const fr = {
         },
       },
     },
+    emptyState: {
+      title: "Open BIM Viewer",
+      description:
+        "Chargez vos modèles IFC pour explorer et analyser les données du bâtiment en temps réel.",
+      loadButton: "Sélectionner IFC",
+      dropzoneText: "Déposez votre fichier .ifc ici ou sélectionnez-en un",
+      sheetsTitle: "📊 Connexion de données en direct",
+      sheetsDescription:
+        "Connectez votre modèle à des données en direct via Google Sheets. Ajoutez des URLs aux propriétés des éléments pour créer des connexions en direct.",
+      docsTitle: "Documentation",
+      docsDescription:
+        "Consultez notre documentation pour en savoir plus sur les fonctionnalités et les intégrations.",
+      docsLink: "Voir sur GitHub",
+      sheetIdTip:
+        "L'ID de la feuille est la longue chaîne de caractères de votre URL Google Sheets",
+      sheetIdHint:
+        '💡 Astuce : Faites un clic droit sur une cellule dans Google Sheets et sélectionnez "Obtenir le lien de la cellule"',
+      urlFormat: "Format :",
+      urlExample: "spreadsheets/d/1A2B3C4D5E6F7G8H9I0/edit?range=A1",
+      connection: "Connexion",
+      connectionTitle: "📊 Connexion de données en direct",
+      connectionDescription:
+        "Connectez votre modèle à des données en direct via Google Sheets. Ajoutez des URLs aux propriétés des éléments pour créer des connexions en direct.",
+    },
   },
 };

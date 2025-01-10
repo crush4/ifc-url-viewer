@@ -5,7 +5,6 @@ import * as BUI from "@thatopen/ui";
 import projectInformation from "./components/Panels/ProjectInformation";
 import elementData from "./components/Panels/Selection";
 import settings from "./components/Panels/Settings";
-import load from "./components/Toolbars/Sections/Import";
 import help from "./components/Panels/Help";
 import camera from "./components/Toolbars/Sections/Camera";
 import measurement from "./components/Toolbars/Sections/Measurement";
@@ -15,6 +14,7 @@ import { i18n } from "./locales";
 import { withLocalization } from "./locales/withLocalization";
 import { initI18n } from "./locales/i18n";
 import { CollapsiblePanel } from "./bim-components/CollapsiblePanel";
+import { createEmptyState } from "./components/EmptyState";
 
 async function init() {
   console.log("Starting i18n initialization");
@@ -166,11 +166,6 @@ async function init() {
     BUI.Component.create(() => {
       return BUI.html`
         <bim-tabs floating style="justify-self: center; border-radius: 0.5rem;">
-          <bim-tab label="${i18n.t("toolbar.tabs.import")}">
-            <bim-toolbar>
-              ${load(components)}
-            </bim-toolbar>
-          </bim-tab>
           <bim-tab label="${i18n.t("toolbar.tabs.selection")}">
             <bim-toolbar>
               ${camera(world)}
@@ -201,9 +196,29 @@ async function init() {
         viewport,
       },
     },
+    empty: {
+      template: `
+        "leftPanel emptyState" 1fr
+        /20rem 1fr
+      `,
+      elements: {
+        leftPanel,
+        emptyState: createEmptyState(components),
+      },
+    },
   };
 
-  app.layout = "main";
+  app.layout = fragments.list.size > 0 ? "main" : "empty";
+
+  fragments.onFragmentsLoaded.add(() => {
+    app.layout = "main";
+  });
+
+  fragments.onFragmentsDisposed.add(() => {
+    if (fragments.list.size === 0) {
+      app.layout = "empty";
+    }
+  });
 
   viewportGrid.layouts = {
     main: {

@@ -70,7 +70,6 @@ export default (components: OBC.Components) => {
       `;
     }),
     () => {
-      // This will be called when language changes
       console.log("Settings panel updating due to language change");
     },
   );

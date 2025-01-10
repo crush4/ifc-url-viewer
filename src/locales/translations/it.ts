@@ -59,5 +59,29 @@ export const it = {
         },
       },
     },
+    emptyState: {
+      title: "Open BIM Viewer",
+      description:
+        "Carica i tuoi modelli IFC per esplorare e analizzare i dati dell'edificio in tempo reale.",
+      loadButton: "Seleziona IFC",
+      dropzoneText: "Trascina qui il tuo file .ifc o selezionane uno",
+      sheetsTitle: "📊 Connessione dati in tempo reale",
+      sheetsDescription:
+        "Connetti il tuo modello a dati in tempo reale utilizzando Google Sheets. Aggiungi URL alle proprietà degli elementi per creare connessioni in tempo reale.",
+      docsTitle: "Documentazione",
+      docsDescription:
+        "Consulta la nostra documentazione per saperne di più sulle funzionalità e le integrazioni.",
+      docsLink: "Vedi su GitHub",
+      sheetIdTip:
+        "L'ID del foglio è la lunga stringa dall'URL di Google Sheets",
+      sheetIdHint:
+        '💡 Suggerimento: Fai clic destro su una cella in Google Sheets e seleziona "Ottieni link della cella"',
+      urlFormat: "Formato:",
+      urlExample: "spreadsheets/d/1A2B3C4D5E6F7G8H9I0/edit?range=A1",
+      connection: "Connessione",
+      connectionTitle: "📊 Connessione dati in tempo reale",
+      connectionDescription:
+        "Connetti il tuo modello a dati in tempo reale utilizzando Google Sheets. Aggiungi URL alle proprietà degli elementi per creare connessioni in tempo reale.",
+    },
   },
 };

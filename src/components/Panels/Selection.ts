@@ -425,7 +425,12 @@ export default (components: OBC.Components) => {
     const isCollapsed = viewportGrid?.layout === "collapsed";
 
     return BUI.html`
-      <bim-panel style="position: relative; overflow: visible; transition: width 0.3s ease;">
+      <bim-panel style="
+        position: relative; 
+        overflow: visible; 
+        transition: width 0.3s ease;
+        background-color: rgba(var(--bim-ui_bg-base-rgb), 0.9);
+      ">
         ${collapsiblePanel.createHandle()}
         <bim-panel-section 
           name="selection" 
