@@ -1,0 +1,8 @@
+{
+  "app_type": "node",
+  "startup_file": "server.js",
+  "environment": "production",
+  "node_path": "/usr/bin/node",
+  "node_modules_path": "node_modules",
+  "static_files": "dist"
+}
