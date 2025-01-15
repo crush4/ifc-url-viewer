@@ -21,9 +21,10 @@ export default (components: OBC.Components) => {
   const onLanguageChange = (event: Event) => {
     const selector = event.target as BUI.Selector;
     const lang = selector.value as string;
-    // Store language preference and force a full page reload
     localStorage.setItem("preferred-language", lang);
-    window.location.href = `/${lang}`;
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set("lang", lang);
+    window.location.href = newUrl.toString();
   };
 
   const [worldsTable] = CUI.tables.worldsConfiguration({ components });

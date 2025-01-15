@@ -14,6 +14,11 @@ export default defineConfig({
       input: {
         main: "./index.html",
       },
+      output: {
+        entryFileNames: "[name]-[hash].js",
+        chunkFileNames: "[name]-[hash].js",
+        assetFileNames: "[name]-[hash].[ext]",
+      },
     },
   },
   resolve: {

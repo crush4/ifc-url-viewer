@@ -274,4 +274,7 @@ async function init() {
   viewportGrid.layout = "main";
 }
 
-init();
+// Wrap the init function in a DOM ready check
+document.addEventListener("DOMContentLoaded", () => {
+  init().catch(console.error);
+});
