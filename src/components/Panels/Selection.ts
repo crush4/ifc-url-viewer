@@ -36,7 +36,7 @@ export default (components: OBC.Components) => {
       .split("")
       .reduce(
         (acc, char) => acc * 26 + (char.charCodeAt(0) - "A".charCodeAt(0)),
-        0,
+        0
       );
     return { row: rowMatch, col };
   };
@@ -296,7 +296,7 @@ export default (components: OBC.Components) => {
     // Handle Description properties
     Promise.all(properties).then(async (resolvedProps) => {
       const propertyWithDescription = resolvedProps.find(
-        (props) => props?.Description?.value,
+        (props) => props?.Description?.value
       );
 
       const value = propertyWithDescription?.Description?.value || "";
@@ -373,7 +373,7 @@ export default (components: OBC.Components) => {
     // Wait for all promises to resolve
     Promise.all(properties).then(async (resolvedProps) => {
       const propertyWithDescription = resolvedProps.find(
-        (props) => props?.Description?.value,
+        (props) => props?.Description?.value
       );
 
       const value = propertyWithDescription?.Description?.value || "";
@@ -430,58 +430,50 @@ export default (components: OBC.Components) => {
         overflow: visible; 
         transition: width 0.3s ease;
         background-color: rgba(var(--bim-ui_bg-base-rgb), 0.9);
+        display: flex;
+        flex-direction: column;
       ">
         ${collapsiblePanel.createHandle()}
-        <bim-panel-section 
-          name="selection" 
-          label="${i18n.t("panels.selection.title")}" 
-          icon="solar:document-bold" 
-          fixed
-          style="transition: opacity 0.3s ease; opacity: ${isCollapsed ? "0" : "1"}">
-          <div style="display: flex; gap: 0.375rem;">
+        <div style="display: flex; gap: 0.375rem; padding: 0.25rem 0.5rem; align-items: center;">
+          <div style="display: flex; gap: 0.375rem; flex: 3;">
+            <div style="flex: 1;">
+              <div style="opacity: 0.7; font-size: 0.875rem; margin-bottom: 0.125rem; font-weight: 500;">${i18n.t("panels.elementData.description")}</div>
+              <div style="font-size: 0.875rem; font-weight: 400; line-height: 1.2;">${cellValue}</div>
+            </div>
+            <div style="flex: 1;">
+              <div style="opacity: 0.7; font-size: 0.875rem; margin-bottom: 0.125rem; font-weight: 500;">${i18n.t("panels.elementData.status")}</div>
+              <div style="font-size: 0.875rem; font-weight: 400; line-height: 1.2;">${statusValue}</div>
+            </div>
+            <div style="flex: 1;">
+              <div style="opacity: 0.7; font-size: 0.875rem; margin-bottom: 0.125rem; font-weight: 500;">${i18n.t("panels.elementData.objektgruppe")}</div>
+              <div style="font-size: 0.875rem; font-weight: 400; line-height: 1.2;">${objektgruppeValue}</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.375rem; flex: 1; align-items: center; justify-content: flex-end;">
             <bim-text-input 
               @input=${search} 
               vertical 
               placeholder="${i18n.t("common.search")}" 
               debounce="200"
-              ?disabled=${isCollapsed}>
+              ?disabled=${isCollapsed}
+              style="flex: 1; min-width: 0; font-size: 0.875rem; height: 1.75rem;">
             </bim-text-input>
             <bim-button 
-              style="flex: 0;" 
               @click=${toggleExpanded} 
               icon="eva:expand-fill"
-              ?disabled=${isCollapsed}>
+              ?disabled=${isCollapsed}
+              style="flex-shrink: 0; height: 1.75rem;">
             </bim-button>
             <bim-button 
-              style="flex: 0;" 
               @click=${() => propsTable.downloadData("ElementData", "tsv")} 
               icon="ph:export-fill" 
               tooltip-title="${i18n.t("panels.selection.export.button")}" 
               tooltip-text="${i18n.t("panels.selection.export.tooltip")}"
-              ?disabled=${isCollapsed}>
+              ?disabled=${isCollapsed}
+              style="flex-shrink: 0; height: 1.75rem;">
             </bim-button>
           </div>
-          ${propsTable}
-        </bim-panel-section>
-        
-        <bim-panel-section 
-          name="description" 
-          label="${i18n.t("panels.elementData.title")}" 
-          icon="mdi:database" 
-          fixed
-          style="transition: opacity 0.3s ease; opacity: ${isCollapsed ? "0" : "1"}">
-          <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-            <div style="opacity: 0.7; font-size: 0.9rem; padding: 0 0.5rem;">${i18n.t("panels.elementData.description")}</div>
-            ${cellValue}
-
-            <div style="margin-top: 1.5rem; opacity: 0.7; font-size: 0.9rem; padding: 0 0.5rem;">${i18n.t("panels.elementData.status")}</div>
-            ${statusValue}
-
-            <div style="margin-top: 1.5rem; opacity: 0.7; font-size: 0.9rem; padding: 0 0.5rem;">${i18n.t("panels.elementData.objektgruppe")}</div>
-            ${objektgruppeValue}
-          </div>
-          ${propertySetValues}
-        </bim-panel-section>
+        </div>
       </bim-panel>
     `;
   });
