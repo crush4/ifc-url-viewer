@@ -23,6 +23,10 @@ async function init() {
 
   BUI.Manager.init();
 
+  // Set light theme as default
+  const html = document.querySelector("html")!;
+  html.className = "bim-ui-light";
+
   const wrapWithLocalization = (component: BUI.Component | BUI.Panel) => {
     return withLocalization(component, () => {
       component.requestUpdate();

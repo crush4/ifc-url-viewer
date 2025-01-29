@@ -21,6 +21,13 @@ export const de = {
         description: "Beschreibung:",
         status: "Status:",
         objektgruppe: "Objektgruppe:",
+        states: {
+          loading: "Daten werden geladen...",
+          noSelection: "Wählen Sie ein Element aus, um Details anzuzeigen",
+          noData: "Keine Daten verfügbar",
+          noDescription: "Keine Beschreibung verfügbar",
+          error: "Daten konnten nicht geladen werden",
+        },
       },
       project: {
         title: "Projekt",

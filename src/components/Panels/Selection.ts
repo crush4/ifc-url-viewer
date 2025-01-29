@@ -101,15 +101,20 @@ export default (components: OBC.Components) => {
   cellReference.style.opacity = "0.7";
 
   const cellValue = new BUI.Label();
-  cellValue.style.padding = "1rem";
-  cellValue.style.display = "block";
-  cellValue.style.fontSize = "1.2rem";
-  cellValue.style.fontWeight = "bold";
+  cellValue.style.padding = "1.5rem";
+  cellValue.style.display = "flex";
+  cellValue.style.alignItems = "center";
+  cellValue.style.justifyContent = "center";
+  cellValue.style.fontSize = "1rem";
+  cellValue.style.fontWeight = "500";
   cellValue.style.textAlign = "center";
-  cellValue.style.background = "var(--bim-ui_bg-contrast-10)";
-  cellValue.style.borderRadius = "0.5rem";
+  cellValue.style.background = "var(--bim-ui_bg-contrast-20)";
+  cellValue.style.borderRadius = "6px";
   cellValue.style.margin = "0.5rem 0";
-  cellValue.textContent = "Loading...";
+  cellValue.style.color = "var(--bim-ui_text)";
+  cellValue.style.opacity = "0.9";
+  cellValue.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
+  cellValue.textContent = i18n.t("panels.elementData.states.noSelection");
 
   // Create a filtered properties table for the PropertySet
   const [propertySetValues, updatePropertySetValues] =
@@ -308,18 +313,23 @@ export default (components: OBC.Components) => {
         cellReference.textContent = extractCellReference(value);
 
         try {
-          cellValue.textContent = "Loading...";
+          cellValue.textContent = i18n.t("panels.elementData.states.loading");
           const fetchedValue = await fetchSheetData(value);
           cellValue.textContent = fetchedValue as string;
+          cellValue.style.opacity = "1";
+          cellValue.style.fontWeight = "600";
         } catch (error) {
-          cellValue.textContent = `Error: ${error}`;
+          cellValue.textContent = i18n.t("panels.elementData.states.error");
           cellValue.style.color = "var(--bim-ui_error)";
+          cellValue.style.opacity = "0.9";
         }
       } else {
-        descriptionLink.label = "No description";
+        descriptionLink.label = i18n.t(
+          "panels.elementData.states.noDescription",
+        );
         descriptionLink.onclick = null;
         cellReference.textContent = "";
-        cellValue.textContent = "No data";
+        cellValue.textContent = i18n.t("panels.elementData.states.noData");
       }
 
       descriptionLink.requestUpdate();
@@ -339,12 +349,23 @@ export default (components: OBC.Components) => {
   highlighter.events.select.onClear.add(() => {
     updatePropsTable({ fragmentIdMap: {} });
     updatePropertySetValues({ fragmentIdMap: {} });
-    statusUrl.label = "No URL";
+    statusUrl.label = i18n.t("common.noUrl");
     statusRef.textContent = "";
-    statusValue.textContent = "Loading...";
-    objektgruppeUrl.label = "No URL";
+    statusValue.textContent = i18n.t("panels.elementData.states.noSelection");
+    objektgruppeUrl.label = i18n.t("common.noUrl");
     objektgruppeRef.textContent = "";
-    objektgruppeValue.textContent = "Loading...";
+    objektgruppeValue.textContent = i18n.t(
+      "panels.elementData.states.noSelection",
+    );
+    // Reset description field
+    descriptionLink.label = i18n.t("panels.elementData.states.noDescription");
+    descriptionLink.onclick = null;
+    cellReference.textContent = "";
+    cellValue.textContent = i18n.t("panels.elementData.states.noSelection");
+    cellValue.style.opacity = "0.9";
+    cellValue.style.fontWeight = "500";
+    cellValue.style.color = "var(--bim-ui_text)";
+
     if (!viewportGrid) return;
     if (viewportGrid.layout === "collapsed") return;
     viewportGrid.layout = "main";
@@ -385,18 +406,23 @@ export default (components: OBC.Components) => {
         cellReference.textContent = extractCellReference(value);
 
         try {
-          cellValue.textContent = "Loading...";
+          cellValue.textContent = i18n.t("panels.elementData.states.loading");
           const fetchedValue = await fetchSheetData(value);
           cellValue.textContent = fetchedValue as string;
+          cellValue.style.opacity = "1";
+          cellValue.style.fontWeight = "600";
         } catch (error) {
-          cellValue.textContent = `Error: ${error}`;
+          cellValue.textContent = i18n.t("panels.elementData.states.error");
           cellValue.style.color = "var(--bim-ui_error)";
+          cellValue.style.opacity = "0.9";
         }
       } else {
-        descriptionLink.label = "No description";
+        descriptionLink.label = i18n.t(
+          "panels.elementData.states.noDescription",
+        );
         descriptionLink.onclick = null;
         cellReference.textContent = "";
-        cellValue.textContent = "No data";
+        cellValue.textContent = i18n.t("panels.elementData.states.noData");
       }
 
       descriptionLink.requestUpdate();
@@ -429,7 +455,11 @@ export default (components: OBC.Components) => {
         position: relative; 
         overflow: visible; 
         transition: width 0.3s ease;
-        background-color: rgba(var(--bim-ui_bg-base-rgb), 0.9);
+        background: var(--bim-ui_bg-base);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        margin: 0.5rem;
+        height: fit-content;
       ">
         ${collapsiblePanel.createHandle()}
         <bim-panel-section 
@@ -469,16 +499,30 @@ export default (components: OBC.Components) => {
           label="${i18n.t("panels.elementData.title")}" 
           icon="mdi:database" 
           fixed
-          style="transition: opacity 0.3s ease; opacity: ${isCollapsed ? "0" : "1"}">
-          <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-            <div style="opacity: 0.7; font-size: 0.9rem; padding: 0 0.5rem;">${i18n.t("panels.elementData.description")}</div>
+          style="
+            transition: opacity 0.3s ease; 
+            opacity: ${isCollapsed ? "0" : "1"};
+          ">
+          <div style="display: flex; flex-direction: column; gap: 0.25rem; padding: 0.5rem;">
+            <div style="
+              opacity: 0.85; 
+              font-size: 0.9rem; 
+              padding: 0.5rem; 
+              background: var(--bim-ui_bg-contrast-10);
+              border-radius: 4px;
+              font-weight: 500;
+            ">${i18n.t("panels.elementData.description")}</div>
             ${cellValue}
 
+            <!-- Status section commented out
             <div style="margin-top: 1.5rem; opacity: 0.7; font-size: 0.9rem; padding: 0 0.5rem;">${i18n.t("panels.elementData.status")}</div>
             ${statusValue}
+            -->
 
+            <!-- Objektgruppe section commented out
             <div style="margin-top: 1.5rem; opacity: 0.7; font-size: 0.9rem; padding: 0 0.5rem;">${i18n.t("panels.elementData.objektgruppe")}</div>
             ${objektgruppeValue}
+            -->
           </div>
           ${propertySetValues}
         </bim-panel-section>

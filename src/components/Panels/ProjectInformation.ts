@@ -13,6 +13,7 @@ export default (components: OBC.Components) => {
     selectHighlighterName: "select",
   });
   relationsTree.preserveStructureOnFilter = true;
+  relationsTree.expanded = true;
 
   const [loadBtn] = CUI.buttons.loadIfc({ components });
   loadBtn.label = i18n.t("panels.project.loadModel");

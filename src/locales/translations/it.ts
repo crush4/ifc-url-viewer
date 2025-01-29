@@ -21,6 +21,13 @@ export const it = {
         description: "Descrizione:",
         status: "Stato:",
         objektgruppe: "Gruppo oggetti:",
+        states: {
+          loading: "Caricamento dati...",
+          noSelection: "Seleziona un elemento per vedere i dettagli",
+          noData: "Nessun dato disponibile",
+          noDescription: "Nessuna descrizione disponibile",
+          error: "Impossibile caricare i dati",
+        },
       },
       project: {
         title: "Progetto",

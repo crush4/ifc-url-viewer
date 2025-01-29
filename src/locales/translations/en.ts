@@ -21,6 +21,13 @@ export const en = {
         description: "Description:",
         status: "Status:",
         objektgruppe: "Objektgruppe:",
+        states: {
+          loading: "Loading data...",
+          noSelection: "Select an element to view details",
+          noData: "No data available",
+          noDescription: "No description available",
+          error: "Could not load data",
+        },
       },
       project: {
         title: "Project",
