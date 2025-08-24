@@ -1,22 +1,54 @@
 import * as BUI from "@thatopen/ui";
 import * as OBC from "@thatopen/components";
-import * as CUI from "@thatopen/ui-obc";
+import * as FRAGS from "@thatopen/fragments";
 import { i18n } from "../locales/i18n";
 
 const EmptyStateContent = (components: OBC.Components) => {
-  const [loadBtn] = CUI.buttons.loadIfc({ components });
-  loadBtn.label = i18n.t("emptyState.loadButton");
-  loadBtn.icon = "ph:file-plus-bold";
-  loadBtn.style.cssText = `
-    --bim-ui-button-bg: var(--bim-ui_accent-base);
-    --bim-ui-button-text: var(--bim-ui_bg-base);
-    border-radius: 8px;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.95rem;
-    font-weight: 500;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-    margin-top: 1rem;
-  `;
+  const handleFileSelect = async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.ifc';
+    input.multiple = false;
+    
+    input.onchange = async (event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
+      
+      if (file && file.name.toLowerCase().endsWith('.ifc')) {
+        try {
+          // Create IfcImporter instance as per ThatOpen documentation
+          const serializer = new FRAGS.IfcImporter();
+          
+          // Let ThatOpen handle WASM loading automatically
+          console.log("Using default WASM configuration");
+          
+          const arrayBuffer = await file.arrayBuffer();
+          const ifcBytes = new Uint8Array(arrayBuffer);
+          
+          console.log("Converting IFC to Fragments...");
+          const fragmentBytes = await serializer.process({
+            bytes: ifcBytes,
+            progressCallback: (progress, data) => console.log("Conversion progress:", progress, data),
+          });
+          
+          console.log("IFC converted to Fragments successfully");
+          
+          // Load the converted fragments
+          const fragments = components.get(OBC.FragmentsManager);
+          await fragments.core.load(fragmentBytes, {
+            modelId: "imported-model"
+          });
+          
+          console.log("Fragments loaded successfully:", file.name);
+        } catch (error) {
+          console.error("Error processing IFC file:", error);
+          alert(`Error processing IFC file: ${(error as Error).message || String(error)}`);
+        }
+      }
+    };
+    
+    input.click();
+  };
 
   const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
@@ -43,9 +75,33 @@ const EmptyStateContent = (components: OBC.Components) => {
     );
 
     if (ifcFile) {
-      const ifcLoader = components.get(OBC.IfcLoader);
-      const arrayBuffer = await ifcFile.arrayBuffer();
-      await ifcLoader.load(new Uint8Array(arrayBuffer));
+      try {
+        // Create IfcImporter instance as per ThatOpen documentation
+        const serializer = new FRAGS.IfcImporter();
+        serializer.wasm = { absolute: true, path: "https://unpkg.com/web-ifc@0.0.46/" };
+        
+        const arrayBuffer = await ifcFile.arrayBuffer();
+        const ifcBytes = new Uint8Array(arrayBuffer);
+        
+        console.log("Converting IFC to Fragments...");
+        const fragmentBytes = await serializer.process({
+          bytes: ifcBytes,
+          progressCallback: (progress, data) => console.log("Conversion progress:", progress, data),
+        });
+        
+        console.log("IFC converted to Fragments successfully");
+        
+        // Load the converted fragments
+        const fragments = components.get(OBC.FragmentsManager);
+        await fragments.core.load(fragmentBytes, {
+          modelId: "imported-model"
+        });
+        
+        console.log("Fragments loaded successfully:", ifcFile.name);
+      } catch (error) {
+        console.error("Error processing IFC file:", error);
+        alert(`Error processing IFC file: ${(error as Error).message || String(error)}`);
+      }
     }
   };
 
@@ -120,7 +176,21 @@ const EmptyStateContent = (components: OBC.Components) => {
           <div style="opacity: 0.7;">
             ${i18n.t("emptyState.dropzoneText")}
           </div>
-          ${loadBtn}
+          <bim-button 
+            @click=${handleFileSelect}
+            label="${i18n.t("emptyState.loadButton")}"
+            icon="ph:file-plus-bold"
+            style="
+              --bim-ui-button-bg: var(--bim-ui_accent-base);
+              --bim-ui-button-text: var(--bim-ui_bg-base);
+              border-radius: 8px;
+              padding: 0.75rem 1.5rem;
+              font-size: 0.95rem;
+              font-weight: 500;
+              transition: transform 0.2s ease, opacity 0.2s ease;
+              margin-top: 1rem;
+            ">
+          </bim-button>
         </div>
       </div>
 

@@ -6,24 +6,11 @@ import groupings from "./Sections/Groupings";
 
 export default (components: OBC.Components) => {
   const [modelsList] = CUI.tables.modelsList({ components });
-  const [relationsTree] = CUI.tables.relationsTree({
-    components,
-    models: [],
-    hoverHighlighterName: "hover",
-    selectHighlighterName: "select",
-  });
-  relationsTree.preserveStructureOnFilter = true;
-  relationsTree.expanded = true;
 
   const [loadBtn] = CUI.buttons.loadIfc({ components });
   loadBtn.label = i18n.t("panels.project.loadModel");
   loadBtn.style.width = "100%";
   loadBtn.style.marginBottom = "1rem";
-
-  const search = (e: Event) => {
-    const input = e.target as BUI.TextInput;
-    relationsTree.queryString = input.value;
-  };
 
   return BUI.Component.create<BUI.Panel>(() => {
     return BUI.html`
@@ -33,11 +20,9 @@ export default (components: OBC.Components) => {
           ${modelsList}
         </bim-panel-section>
         <bim-panel-section label="Spatial Structures" icon="ph:tree-structure-fill">
-          <div style="display: flex; gap: 0.375rem;">
-            <bim-text-input @input=${search} vertical placeholder="Search..." debounce="200"></bim-text-input>
-            <bim-button style="flex: 0;" @click=${() => (relationsTree.expanded = !relationsTree.expanded)} icon="eva:expand-fill"></bim-button>
+          <div style="padding: 1rem; text-align: center; opacity: 0.7;">
+            <p>Spatial structure view will be available in future updates</p>
           </div>
-          ${relationsTree}
         </bim-panel-section>
         
         ${groupings(components)}

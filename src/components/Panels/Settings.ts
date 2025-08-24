@@ -27,13 +27,6 @@ export default (components: OBC.Components) => {
     window.location.href = newUrl.toString();
   };
 
-  const [worldsTable] = CUI.tables.worldsConfiguration({ components });
-
-  const onWorldConfigSearch = (e: Event) => {
-    const input = e.target as BUI.TextInput;
-    worldsTable.queryString = input.value;
-  };
-
   return withLocalization(
     BUI.Component.create<BUI.Panel>(() => {
       return BUI.html`
@@ -61,11 +54,9 @@ export default (components: OBC.Components) => {
           </bim-panel-section>
 
           <bim-panel-section label="${i18n.t("panels.settings.worlds")}" icon="tabler:world">
-            <div style="display: flex; gap: 0.375rem;">
-              <bim-text-input @input=${onWorldConfigSearch} vertical placeholder="${i18n.t("common.search")}" debounce="200"></bim-text-input>
-              <bim-button style="flex: 0;" @click=${() => (worldsTable.expanded = !worldsTable.expanded)} icon="eva:expand-fill"></bim-button>
+            <div style="padding: 1rem; text-align: center; opacity: 0.7;">
+              <p>Worlds configuration will be available in future updates</p>
             </div>
-            ${worldsTable}
           </bim-panel-section>
         </bim-panel> 
       `;

@@ -72,74 +72,46 @@ async function init() {
 
   viewport.addEventListener("resize", resizeWorld);
 
+  // Initialize FragmentsManager worker FIRST before other components
+  const fragments = components.get(OBC.FragmentsManager);
+  const githubUrl = "https://thatopen.github.io/engine_fragment/resources/worker.mjs";
+  const fetchedUrl = await fetch(githubUrl);
+  const workerBlob = await fetchedUrl.blob();
+  const workerFile = new File([workerBlob], "worker.mjs", {
+    type: "text/javascript",
+  });
+  const workerUrl = URL.createObjectURL(workerFile);
+  fragments.init(workerUrl);
+
+  // Now initialize other components that depend on FragmentsManager
   components.init();
 
+  // Configure postproduction with new API
   postproduction.enabled = true;
-  postproduction.customEffects.excludedMeshes.push(worldGrid.three);
-  postproduction.setPasses({ custom: true, ao: true, gamma: true });
-  postproduction.customEffects.lineColor = 0x17191c;
+  postproduction.excludedObjectsPass.addExcludedMaterial(worldGrid.material);
+  postproduction.outlinesEnabled = true;
+  postproduction.excludedObjectsEnabled = true;
 
   const appManager = components.get(AppManager);
   const viewportGrid = viewport.querySelector<BUI.Grid>("bim-grid[floating]")!;
   appManager.grids.set("viewport", viewportGrid);
 
-  const fragments = components.get(OBC.FragmentsManager);
-  const indexer = components.get(OBC.IfcRelationsIndexer);
   const classifier = components.get(OBC.Classifier);
-  classifier.list.CustomSelections = {};
-
-  const ifcLoader = components.get(OBC.IfcLoader);
-  await ifcLoader.setup();
-
-  const tilesLoader = components.get(OBF.IfcStreamer);
-  tilesLoader.world = world;
-  tilesLoader.culler.threshold = 10;
-  tilesLoader.culler.maxHiddenTime = 1000;
-  tilesLoader.culler.maxLostTime = 40000;
 
   const highlighter = components.get(OBF.Highlighter);
   highlighter.setup({ world });
   highlighter.zoomToSelection = true;
 
-  const culler = components.get(OBC.Cullers).create(world);
-  culler.threshold = 5;
-
-  world.camera.controls.restThreshold = 0.25;
-  world.camera.controls.addEventListener("rest", () => {
-    culler.needsUpdate = true;
-    tilesLoader.cancel = true;
-    tilesLoader.culler.needsUpdate = true;
+  // Update fragments when camera moves (required for LOD and culling)
+  world.camera.controls.addEventListener("control", () => {
+    fragments.core.update();
   });
 
-  fragments.onFragmentsLoaded.add(async (model) => {
-    if (model.hasProperties) {
-      await indexer.process(model);
-      classifier.byEntity(model);
-    }
-
-    if (!model.isStreamed) {
-      for (const fragment of model.items) {
-        world.meshes.add(fragment.mesh);
-        culler.add(fragment.mesh);
-      }
-    }
-
-    world.scene.three.add(model);
-
-    if (!model.isStreamed) {
-      setTimeout(async () => {
-        world.camera.fit(world.meshes, 0.8);
-      }, 50);
-    }
-  });
-
-  fragments.onFragmentsDisposed.add(({ fragmentIDs }) => {
-    for (const fragmentID of fragmentIDs) {
-      const mesh = [...world.meshes].find((mesh) => mesh.uuid === fragmentID);
-      if (mesh) {
-        world.meshes.delete(mesh);
-      }
-    }
+  // Handle model loading
+  fragments.list.onItemSet.add(async ({ value: model }) => {
+    model.useCamera(world.camera.three);
+    world.scene.three.add(model.object);
+    await fragments.core.update(true);
   });
 
   const collapsiblePanel = components.get(CollapsiblePanel);
@@ -212,16 +184,10 @@ async function init() {
     },
   };
 
-  app.layout = fragments.list.size > 0 ? "main" : "empty";
+  app.layout = (fragments.list.size > 0 ? "main" : "empty") as any;
 
-  fragments.onFragmentsLoaded.add(() => {
-    app.layout = "main";
-  });
-
-  fragments.onFragmentsDisposed.add(() => {
-    if (fragments.list.size === 0) {
-      app.layout = "empty";
-    }
+  fragments.list.onItemSet.add(() => {
+    app.layout = "main" as any;
   });
 
   viewportGrid.layouts = {
@@ -275,7 +241,7 @@ async function init() {
     },
   };
 
-  viewportGrid.layout = "main";
+  viewportGrid.layout = "main" as any;
 }
 
 // Wrap the init function in a DOM ready check

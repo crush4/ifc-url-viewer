@@ -5,8 +5,8 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.2.2-blue.svg" alt="TypeScript"></a>
-  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-5.4.11-646CFF.svg" alt="Vite"></a>
-  <a href="https://thatopen.com/"><img src="https://img.shields.io/badge/That%20Open-2.4.2-orange.svg" alt="That Open"></a>
+  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-6.3.5-646CFF.svg" alt="Vite"></a>
+  <a href="https://thatopen.com/"><img src="https://img.shields.io/badge/That%20Open-3.1.x-orange.svg" alt="That Open"></a>
 </p>
 
 ## Why?
